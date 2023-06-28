@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: #label of deployment object
+  name: flipfit-dep3
+  labels:
+    app: flipfit3
+spec:
+  replicas: 3
+  selector: #deployment
+    matchLabels:
+      app: flipfit3
+  template: # Pod spec
+    metadata:
+      labels:
+        app: flipfit3
+    spec: #spec of pods
+      volumes:
+        - name: flipfit-volume
+          configMap:
+            name: flipfit-dev-configmap
+      containers:
+        - name: flipfit-contanier
+          image: jedi:106
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: flipfit-volume
+              mountPath: "/etc/config"
+          ports:
+            - containerPort: 8080 # this does not actually expose a port, this is just for documentation (similar to EXPOSE in dockerfile)
